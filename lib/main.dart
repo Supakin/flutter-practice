@@ -125,6 +125,15 @@ class _MyHomePageState extends State<MyHomePage> {
       }
       selectingQuestion = null;
       selectingAnswer = null;
+
+      // over game
+      if (questions.length == 0 && answers.length == 0) isGameOver = true;
+    });
+  }
+
+  newGame() {
+    setState(() {
+      initGame();
     });
   }
 
@@ -137,58 +146,62 @@ class _MyHomePageState extends State<MyHomePage> {
         body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(children: <Widget>[
-            Text.rich(TextSpan(children: [
-              TextSpan(text: "Warning Score: "),
-              TextSpan(
-                  text: "$warningScore",
-                  style: TextStyle(
-                    color: Colors.red,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30.0,
-                  ))
-            ])),
+            // Text.rich(TextSpan(children: [
+            //   TextSpan(text: "Warning Score: "),
+            //   TextSpan(
+            //       text: "$warningScore",
+            //       style: TextStyle(
+            //         color: Colors.red,
+            //         fontWeight: FontWeight.bold,
+            //         fontSize: 30.0,
+            //       ))
+            // ])),
             if (!isGameOver)
               Row(
                 children: <Widget>[
-                  Column(
-                      children: questions.map((question) {
-                    return Container(
-                        child: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor: (question.selecting)
-                                  ? MaterialStateProperty.all<Color>(
-                                      Colors.blue)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.white),
-                              foregroundColor: (question.selecting)
-                                  ? MaterialStateProperty.all<Color>(
-                                      Colors.white)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.blue),
-                            ),
-                            child: Text(question.engValue.toString()),
-                            onPressed: () => {selectQuestion(question)}));
-                  }).toList()),
+                  Expanded(
+                      flex: 4,
+                      child: Column(
+                          children: questions.map((question) {
+                        return Container(
+                            child: TextButton(
+                                style: ButtonStyle(
+                                  backgroundColor: (question.selecting)
+                                      ? MaterialStateProperty.all<Color>(
+                                          Colors.blue)
+                                      : MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  foregroundColor: (question.selecting)
+                                      ? MaterialStateProperty.all<Color>(
+                                          Colors.white)
+                                      : MaterialStateProperty.all<Color>(
+                                          Colors.blue),
+                                ),
+                                child: Text(question.engValue.toString()),
+                                onPressed: () => {selectQuestion(question)}));
+                      }).toList())),
                   Spacer(),
-                  Column(
-                      children: answers.map((answer) {
-                    return Container(
-                        child: TextButton(
-                            style: ButtonStyle(
-                              backgroundColor: (answer.selecting)
-                                  ? MaterialStateProperty.all<Color>(
-                                      Colors.green)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.white),
-                              foregroundColor: (answer.selecting)
-                                  ? MaterialStateProperty.all<Color>(
-                                      Colors.white)
-                                  : MaterialStateProperty.all<Color>(
-                                      Colors.green),
-                            ),
-                            child: Text(answer.value.toString()),
-                            onPressed: () => {selectAnswer(answer)}));
-                  }).toList()),
+                  Expanded(
+                      flex: 4,
+                      child: Column(
+                          children: answers.map((answer) {
+                        return Container(
+                            child: TextButton(
+                                style: ButtonStyle(
+                                  backgroundColor: (answer.selecting)
+                                      ? MaterialStateProperty.all<Color>(
+                                          Colors.green)
+                                      : MaterialStateProperty.all<Color>(
+                                          Colors.white),
+                                  foregroundColor: (answer.selecting)
+                                      ? MaterialStateProperty.all<Color>(
+                                          Colors.white)
+                                      : MaterialStateProperty.all<Color>(
+                                          Colors.green),
+                                ),
+                                child: Text(answer.value.toString()),
+                                onPressed: () => {selectAnswer(answer)}));
+                      }).toList())),
                 ],
               ),
             if (selectingQuestion != null && selectingAnswer != null)
@@ -208,7 +221,37 @@ class _MyHomePageState extends State<MyHomePage> {
                         onPressed: () => {confirm()}),
                   )
                 ],
-              )
+              ),
+            if (isGameOver)
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text.rich(TextSpan(
+                              text: "Wowwwww !",
+                              style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 40.0,
+                              ))),
+                          Container(child: Text("You are successed.")),
+                          TextButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.orange),
+                                foregroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.white),
+                              ),
+                              child: Text("New Game"),
+                              onPressed: () => {newGame()}),
+                        ])
+                  ]),
           ]),
         ));
   }
